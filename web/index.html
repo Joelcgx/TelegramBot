@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script>
+    async function fetchPublicIP() {
+        try {
+            // Hacer una solicitud a api.ipify para obtener la IP pública
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+
+            // Mostrar la IP en el HTML
+            console.log(data.ip)
+        } catch (error) {
+            console.error('Error fetching public IP:', error);
+        }
+    }
+
+    // Llamar a la función al cargar la página
+    fetchPublicIP();
+</script>
+
+<body>
+    <div class="container-all">
+        <header>
+            <span class="lef-header">
+                <h2>Telegram Bot</h2>
+            </span>
+            <span class="rigth-header">
+                <a href="" title="About BOT">About bot</a>
+            </span>
+        </header>
+        <!-- Content -->
+        <main>
+            <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis saepe ea asperiores ad quia maiores
+                voluptatibus, sint excepturi totam doloribus praesentium, error odit necessitatibus porro veniam modi
+                obcaecati tenetur velit.</h1>
+        </main>
+    </div>
+</body>
+
+</html>
