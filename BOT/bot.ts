@@ -3,13 +3,14 @@ import { startServer } from "./https";
 import { formatGameList } from "./games/helpers";
 import { gamesIncest, gamesSandBox } from "./games/games";
 import { Commands } from "./commands";
-
+import dotenv from "dotenv";
 
 //Start SERVER HTTP
 startServer();
 
 // Init Telegram Bot
-const token = "8084695773:AAHYt71K8PvlrRQT64BoY6GhipLR6D41lXs";
+dotenv.config();
+const token = process.env.TOKEN;
 const BOT = new TelegramBot(token, { polling: true });
 
 

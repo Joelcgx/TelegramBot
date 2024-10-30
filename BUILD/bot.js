@@ -8,10 +8,12 @@ const https_1 = require("./https");
 const helpers_1 = require("./games/helpers");
 const games_1 = require("./games/games");
 const commands_1 = require("./commands");
+const dotenv_1 = __importDefault(require("dotenv"));
 //Start SERVER HTTP
 (0, https_1.startServer)();
 // Init Telegram Bot
-const token = "8084695773:AAHYt71K8PvlrRQT64BoY6GhipLR6D41lXs";
+dotenv_1.default.config();
+const token = process.env.TOKEN;
 const BOT = new node_telegram_bot_api_1.default(token, { polling: true });
 function contieneLink(text) {
     const linkRegex = /(https?:\/\/(?:www\.)?(?:xxx|sex|porn|xnxx|xvideos|adult|adultfriendfinder)(?:\.\w+)+(?:\/\S*)?)/i;
