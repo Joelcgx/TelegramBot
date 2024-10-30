@@ -19,6 +19,7 @@ function contieneLink(text: string): boolean {
 
     // Expresión regular para palabras inapropiadas
     const palabrasInapropiadas = /(porn|child\s*porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito|pornito|puto|puta|put@)/i;
+    const englishBadWords = /\b(bitch|bitches|tu madre|asshole|ass|motherfucker|mother fucker|son of a bitch|fuck you|fuck|pussy|dick|cock|maricon|maricón|pendejo|estupido|stupid|estúpido|marica|mierda|shit|idiota|idiot|fucker|cagon|cagón|Chamaco miado|morro miado)\b/gi;
 
     // Enlaces permitidos: se incluyen las URLs deseadas
     const enlacePermitido = /https?:\/\/t\.me\/(GameSearchOficial|juegosdelhimalaya)(\/\S*)?/i;
@@ -35,6 +36,7 @@ function contieneLink(text: string): boolean {
     }
 
     return (
+        englishBadWords.test(textoNormalizado) ||
         linkRegex.test(textoNormalizado) ||
         telegramLinkRegex.test(textoNormalizado) ||
         palabrasInapropiadas.test(textoNormalizado)
