@@ -19,7 +19,7 @@ function contieneLink(text: string): boolean {
 
     // Expresión regular para palabras inapropiadas
     const palabrasInapropiadas = /(porn|child\s*porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito|pornito|puto|puta|put@)/i;
-    const englishBadWords = /\b(bitch|bitches|tu madre|asshole|ass|motherfucker|mother fucker|son of a bitch|fuck you|fuck|pussy|dick|cock|maricon|maricón|pendejo|estupido|stupid|estúpido|marica|mierda|shit|idiota|idiot|fucker|cagon|cagón|Chamaco miado|morro miado)\b/gi;
+    const englishBadWords = /\b(bitch|bitches|putisima|perra|perrisima|mamar|mamando|me la mama|asshole|ass|motherfucker|mother fucker|son of a bitch|fuck you|fuck|pussy|dick|cock|maricon|maricón|maricones|pendejo|estupido|stupid|estúpido|marica|mierda|shit|idiota|idiot|fucker|cagon|cagón|Chamaco miado|morro miado|cvlo|chingo|chupapija|pija|verga|vrg|tragapito|comeverga|caremonda|vrga|comemonda|chingar|chingas|chingando|pendejos|pendejete|chispas|culon|culos|culones|culero|culo|me la pelan|coño|vagina|Joder|cuka|cuca|panochon|panocha|vaginita|vergita|vergitas|te empinan|se vino de pechito|comete esta|furro|1o1lis|101is|lol's|lol1s|Alguien para intercambio|101i5|put4|mrd|alv|m1ado|miadas|buenos dias a todos|te faltan huevos|mamame|me la pelas|pelaste|vrgas|vergas|bobocagao|cagado|conchetumadre|caraanchoa|anchoa|concha|pelotudo|soplanucas|benitocamelo|tocameesta|tocamesta)\b/gi;
 
     // Enlaces permitidos: se incluyen las URLs deseadas
     const enlacePermitido = /https?:\/\/t\.me\/(GameSearchOficial|juegosdelhimalaya)(\/\S*)?/i;
