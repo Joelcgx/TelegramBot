@@ -1,5 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import { startServer } from "./https";
+import { formatGameList } from "./games/helpers";
+import { gamesIncest, gamesSandBox } from "./games/games";
 
 
 //Start SERVER HTTP
@@ -10,14 +12,23 @@ const token = "8084695773:AAHYt71K8PvlrRQT64BoY6GhipLR6D41lXs";
 const BOT = new TelegramBot(token, { polling: true });
 
 
-// Function with regex for delete this bad words
 function contieneLink(text: string): boolean {
     // Expresiones regulares para enlaces XXX, enlaces de grupos de Telegram, y otros enlaces de spam
     const linkRegex =
         /(https?:\/\/(?:www\.)?(?:xxx|sex|porn|xnxx|xvideos|adult|adultfriendfinder)(?:\.\w+)+(?:\/\S*)?)/i; // Enlaces XXX
     const telegramLinkRegex = /(https?:\/\/t\.me\/\S+)/i; // Enlaces de Telegram
     const palabrasInapropiadas =
-        /\b(porn|child porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito)\b/i; // Palabras inapropiadas
+        /\b(porn|child porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito|pornito)\b/i; // Palabras inapropiadas
+
+    // Enlace permitido
+    const enlacePermitido = /https?:\/\/t\.me\/juegosdelhimalaya\/\S+/i;
+
+    // Si el enlace es el permitido, retorna false (no es inapropiado)
+    if (enlacePermitido.test(text)) {
+        return false;
+    }
+
+    // Si hay enlaces o palabras inapropiadas, retorna true
     return (
         linkRegex.test(text) ||
         telegramLinkRegex.test(text) ||
@@ -25,15 +36,16 @@ function contieneLink(text: string): boolean {
     );
 }
 
+// Stickers Welcome's
 // Store sticker id
-const stickerIds: string[] = [];
+const stickerWelcomeIds: string[] = [];
 
-const stickerPackName = 'CotorreoDickman';
+const stickerWelcomePackName = 'BOT153';
 
-BOT.getStickerSet(stickerPackName).then((stickerSet) => {
+BOT.getStickerSet(stickerWelcomePackName).then((stickerSet) => {
     console.log(`ID del sticker pack: ${stickerSet.name}`);
     stickerSet.stickers.forEach(sticker => {
-        stickerIds.push(sticker.file_id); // Almacena el ID del sticker
+        stickerWelcomeIds.push(sticker.file_id); // Almacena el ID del sticker
     });
 }).catch(error => {
     console.error('Error al obtener el sticker pack:', error);
@@ -58,6 +70,18 @@ BOT.on("message", (msg) => {
     }
 });
 
+// Stickers oldest
+const stickerPackName = 'CotorreoDickman';
+const stckid: string[] = [];
+
+BOT.getStickerSet(stickerPackName).then((stickerSet) => {
+    console.log(`ID del sticker pack: ${stickerSet.name}`);
+    stickerSet.stickers.forEach(sticker => {
+        stckid.push(sticker.file_id); // Almacena el ID del sticker
+    });
+}).catch(error => {
+    console.error('Error al obtener el sticker pack:', error);
+});
 // Maneja la unión de nuevos miembros
 BOT.on("new_chat_members", (msg) => {
     const chatId = msg.chat.id;
@@ -67,7 +91,7 @@ BOT.on("new_chat_members", (msg) => {
         const username = member.username || member.first_name;
 
         // Selecciona un sticker aleatorio
-        const stickerFileId = stickerIds[Math.floor(Math.random() * stickerIds.length)];
+        const stickerFileId = stickerWelcomeIds[Math.floor(Math.random() * stickerWelcomeIds.length)];
 
         // Envía un sticker al nuevo miembro
         BOT.sendSticker(chatId, stickerFileId);
@@ -83,7 +107,7 @@ BOT.onText(/\/gn/, (msg) => {
     const chatId = msg.chat.id;
 
     // Selecciona un sticker aleatorio del pack
-    const stickerFileId = stickerIds[Math.floor(Math.random() * stickerIds.length)];
+    const stickerFileId = stickerWelcomeIds[Math.floor(Math.random() * stickerWelcomeIds.length)];
 
     // Envía el sticker
     BOT.sendSticker(chatId, stickerFileId)
@@ -95,4 +119,18 @@ BOT.onText(/\/gn/, (msg) => {
         });
 });
 
-console.log("Bot está funcionando...");
+// Sandbox
+BOT.onText(/\/sandbox/, (msg) => {
+    const chatId = msg.chat.id;
+    const message = formatGameList(gamesSandBox, "Sandbox");
+
+    BOT.sendMessage(chatId, message, { parse_mode: "Markdown" });
+});
+
+// Incest
+BOT.onText(/\/incest/, (msg) => {
+    const chatId = msg.chat.id;
+    const message = formatGameList(gamesIncest, "Incesto");
+
+    BOT.sendMessage(chatId, message, { parse_mode: "Markdown" });
+});
