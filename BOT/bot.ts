@@ -2,6 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import { startServer } from "./https";
 import { formatGameList } from "./games/helpers";
 import { gamesIncest, gamesSandBox } from "./games/games";
+import { Commands } from "./commands";
 
 
 //Start SERVER HTTP
@@ -13,26 +14,30 @@ const BOT = new TelegramBot(token, { polling: true });
 
 
 function contieneLink(text: string): boolean {
-    // Expresiones regulares para enlaces XXX, enlaces de grupos de Telegram, y otros enlaces de spam
-    const linkRegex =
-        /(https?:\/\/(?:www\.)?(?:xxx|sex|porn|xnxx|xvideos|adult|adultfriendfinder)(?:\.\w+)+(?:\/\S*)?)/i; // Enlaces XXX
-    const telegramLinkRegex = /(https?:\/\/t\.me\/\S+)/i; // Enlaces de Telegram
-    const palabrasInapropiadas =
-        /\b(porn|child porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito|pornito)\b/i; // Palabras inapropiadas
+    const linkRegex = /(https?:\/\/(?:www\.)?(?:xxx|sex|porn|xnxx|xvideos|adult|adultfriendfinder)(?:\.\w+)+(?:\/\S*)?)/i;
+    const telegramLinkRegex = /(https?:\/\/t\.me\/\S+)/i;
 
-    // Enlace permitido
-    const enlacePermitido = /https?:\/\/t\.me\/juegosdelhimalaya\/\S+/i;
+    // Expresión regular para palabras inapropiadas
+    const palabrasInapropiadas = /(porn|child\s*porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito|pornito|puto|puta|put@)/i;
 
-    // Si el enlace es el permitido, retorna false (no es inapropiado)
-    if (enlacePermitido.test(text)) {
-        return false;
+    // Enlaces permitidos: se incluyen las URLs deseadas
+    const enlacePermitido = /https?:\/\/t\.me\/(GameSearchOficial|juegosdelhimalaya)(\/\S*)?/i;
+
+    // Normalizar el texto para eliminar espacios adicionales
+    const textoNormalizado = text.trim();
+
+    // Verificación de coincidencia directa
+    console.log(`Verificando el texto: ${textoNormalizado}`);
+    console.log(`Contiene palabra inapropiada: ${palabrasInapropiadas.test(textoNormalizado)}`);
+
+    if (enlacePermitido.test(textoNormalizado)) {
+        return false; // Si es un enlace permitido, retorna false (no es inapropiado)
     }
 
-    // Si hay enlaces o palabras inapropiadas, retorna true
     return (
-        linkRegex.test(text) ||
-        telegramLinkRegex.test(text) ||
-        palabrasInapropiadas.test(text)
+        linkRegex.test(textoNormalizado) ||
+        telegramLinkRegex.test(textoNormalizado) ||
+        palabrasInapropiadas.test(textoNormalizado)
     );
 }
 
@@ -82,6 +87,7 @@ BOT.getStickerSet(stickerPackName).then((stickerSet) => {
 }).catch(error => {
     console.error('Error al obtener el sticker pack:', error);
 });
+
 // Maneja la unión de nuevos miembros
 BOT.on("new_chat_members", (msg) => {
     const chatId = msg.chat.id;
@@ -107,7 +113,7 @@ BOT.onText(/\/gn/, (msg) => {
     const chatId = msg.chat.id;
 
     // Selecciona un sticker aleatorio del pack
-    const stickerFileId = stickerWelcomeIds[Math.floor(Math.random() * stickerWelcomeIds.length)];
+    const stickerFileId = stckid[Math.floor(Math.random() * stickerWelcomeIds.length)];
 
     // Envía el sticker
     BOT.sendSticker(chatId, stickerFileId)
@@ -120,7 +126,7 @@ BOT.onText(/\/gn/, (msg) => {
 });
 
 // Sandbox
-BOT.onText(/\/sandbox/, (msg) => {
+BOT.onText(/\/gsandbox/, (msg) => {
     const chatId = msg.chat.id;
     const message = formatGameList(gamesSandBox, "Sandbox");
 
@@ -128,9 +134,12 @@ BOT.onText(/\/sandbox/, (msg) => {
 });
 
 // Incest
-BOT.onText(/\/incest/, (msg) => {
+BOT.onText(/\/gincest/, (msg) => {
     const chatId = msg.chat.id;
     const message = formatGameList(gamesIncest, "Incesto");
 
     BOT.sendMessage(chatId, message, { parse_mode: "Markdown" });
 });
+
+// Commands
+Commands(BOT);

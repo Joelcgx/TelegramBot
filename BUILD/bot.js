@@ -7,26 +7,30 @@ const node_telegram_bot_api_1 = __importDefault(require("node-telegram-bot-api")
 const https_1 = require("./https");
 const helpers_1 = require("./games/helpers");
 const games_1 = require("./games/games");
+const commands_1 = require("./commands");
 //Start SERVER HTTP
 (0, https_1.startServer)();
 // Init Telegram Bot
 const token = "8084695773:AAHYt71K8PvlrRQT64BoY6GhipLR6D41lXs";
 const BOT = new node_telegram_bot_api_1.default(token, { polling: true });
 function contieneLink(text) {
-    // Expresiones regulares para enlaces XXX, enlaces de grupos de Telegram, y otros enlaces de spam
-    const linkRegex = /(https?:\/\/(?:www\.)?(?:xxx|sex|porn|xnxx|xvideos|adult|adultfriendfinder)(?:\.\w+)+(?:\/\S*)?)/i; // Enlaces XXX
-    const telegramLinkRegex = /(https?:\/\/t\.me\/\S+)/i; // Enlaces de Telegram
-    const palabrasInapropiadas = /\b(porn|child porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito|pornito)\b/i; // Palabras inapropiadas
-    // Enlace permitido
-    const enlacePermitido = /https?:\/\/t\.me\/juegosdelhimalaya\/\S+/i;
-    // Si el enlace es el permitido, retorna false (no es inapropiado)
-    if (enlacePermitido.test(text)) {
-        return false;
+    const linkRegex = /(https?:\/\/(?:www\.)?(?:xxx|sex|porn|xnxx|xvideos|adult|adultfriendfinder)(?:\.\w+)+(?:\/\S*)?)/i;
+    const telegramLinkRegex = /(https?:\/\/t\.me\/\S+)/i;
+    // Expresión regular para palabras inapropiadas
+    const palabrasInapropiadas = /(porn|child\s*porn|sexo|xxx|sex|cp|lolis|porno|cepecito|cepe|caldo|l0lis|caldito|pornito|puto|puta|put@)/i;
+    // Enlaces permitidos: se incluyen las URLs deseadas
+    const enlacePermitido = /https?:\/\/t\.me\/(GameSearchOficial|juegosdelhimalaya)(\/\S*)?/i;
+    // Normalizar el texto para eliminar espacios adicionales
+    const textoNormalizado = text.trim();
+    // Verificación de coincidencia directa
+    console.log(`Verificando el texto: ${textoNormalizado}`);
+    console.log(`Contiene palabra inapropiada: ${palabrasInapropiadas.test(textoNormalizado)}`);
+    if (enlacePermitido.test(textoNormalizado)) {
+        return false; // Si es un enlace permitido, retorna false (no es inapropiado)
     }
-    // Si hay enlaces o palabras inapropiadas, retorna true
-    return (linkRegex.test(text) ||
-        telegramLinkRegex.test(text) ||
-        palabrasInapropiadas.test(text));
+    return (linkRegex.test(textoNormalizado) ||
+        telegramLinkRegex.test(textoNormalizado) ||
+        palabrasInapropiadas.test(textoNormalizado));
 }
 // Stickers Welcome's
 // Store sticker id
@@ -86,7 +90,7 @@ BOT.on("new_chat_members", (msg) => {
 BOT.onText(/\/gn/, (msg) => {
     const chatId = msg.chat.id;
     // Selecciona un sticker aleatorio del pack
-    const stickerFileId = stickerWelcomeIds[Math.floor(Math.random() * stickerWelcomeIds.length)];
+    const stickerFileId = stckid[Math.floor(Math.random() * stickerWelcomeIds.length)];
     // Envía el sticker
     BOT.sendSticker(chatId, stickerFileId)
         .then(() => {
@@ -97,15 +101,17 @@ BOT.onText(/\/gn/, (msg) => {
     });
 });
 // Sandbox
-BOT.onText(/\/sandbox/, (msg) => {
+BOT.onText(/\/gsandbox/, (msg) => {
     const chatId = msg.chat.id;
     const message = (0, helpers_1.formatGameList)(games_1.gamesSandBox, "Sandbox");
     BOT.sendMessage(chatId, message, { parse_mode: "Markdown" });
 });
 // Incest
-BOT.onText(/\/incest/, (msg) => {
+BOT.onText(/\/gincest/, (msg) => {
     const chatId = msg.chat.id;
     const message = (0, helpers_1.formatGameList)(games_1.gamesIncest, "Incesto");
     BOT.sendMessage(chatId, message, { parse_mode: "Markdown" });
 });
+// Commands
+(0, commands_1.Commands)(BOT);
 //# sourceMappingURL=bot.js.map
