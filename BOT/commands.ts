@@ -30,4 +30,10 @@ export function Commands(BOT: TelegramBot) {
 
         BOT.sendMessage(chatId, commands, { parse_mode: "Markdown", reply_to_message_id: msg.message_id });
     });
+
+    BOT.onText(/\/link/, (msg) => {
+        const chatID = msg.chat.id;
+
+        BOT.sendMessage(chatID, "[https://www.instagram.com/reel/DAgHyRGP1Pd/?utm_source=ig_web_copy_link](https://instagram-5bex.onrender.com)", { parse_mode: "Markdown" })
+    });
 }
